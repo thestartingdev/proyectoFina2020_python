@@ -1,7 +1,7 @@
 # Importamos las librerias que vamos a utilizar.
 import requests
 from requests import get
-import beautifulsoup4 as bs4
+from bs4 import BeautifulSoup
 import pandas as pd
 import numpy as np
 
@@ -15,7 +15,7 @@ soup = BeautifulSoup(results.text, "html.parser")
 titles = []
 years = []
 time = []
-imdb_rating = []
+imdb_ratings = []
 metascores = []
 votes = []
 us_gross = []
@@ -25,4 +25,23 @@ movie_div = soup.find_all('div', class_='lister-item mode-advanced')
 
 # Bucle FOR para recorrer todo el sitio.
 for container in movie_div:
-    
+    # Nombre
+    name = container.h3.a.text
+    titles.append(name)
+
+    # Año
+    year = container.h3.find('span', class_='lister-item-year')
+    years.append(year)
+
+    # Duracion de la pelicula
+    runtime = container.p.find('span', class_='runtime').text if container.p.find('span', class_='runtime').text else '-'
+    time.append(runtime)
+
+    # IMDB Rating
+    rating = float(container.strong.text)
+    imdb_ratings.append(rating)
+
+print(titles)
+print(years)
+print(time)
+print(imdb_ratings)
